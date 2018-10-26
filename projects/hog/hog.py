@@ -22,15 +22,18 @@ def roll_dice(num_rolls, dice=six_sided):
     assert num_rolls > 0, 'Must roll at least once.'
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
+    hasOne = False
     score = 0
     while num_rolls != 0:
         dice_result = dice()
         if dice_result == 1:
-            score = 1
-            return score
+            hasOne = True
         else:
             score += dice_result
         num_rolls -= 1
+
+    if hasOne:
+        score = 1
     return score
     # END PROBLEM 1
 
@@ -134,6 +137,7 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     """
     player = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
+    
     "*** YOUR CODE HERE ***"
     while score0 < goal and score1 < goal:
         if player == 0:
@@ -146,9 +150,14 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
             score1 += point_scored
             if is_swap(score1, score0):
                 score0, score1 = score1, score0
+
+        say = say(score0, score1)
+        # say_scores(score0, score1)
         player = other(player)
-        # print(score0, score1)
+
         
+        # f = f(score0, score1)
+
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6
@@ -381,3 +390,5 @@ def run(*args):
 
     if args.run_experiments:
         run_experiments()
+
+
