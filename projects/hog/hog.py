@@ -22,15 +22,16 @@ def roll_dice(num_rolls, dice=six_sided):
     assert num_rolls > 0, 'Must roll at least once.'
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
-    total, k = 0, 0
-    while k < num_rolls:
-        roll = dice()
-        if roll == 1:
-            return 1
+    score = 0
+    while num_rolls != 0:
+        dice_result = dice()
+        if dice_result == 1:
+            score = 1
+            return score
         else:
-            total = roll + total
-        k += 1
-    return total
+            score += dice_result
+        num_rolls -= 1
+    return score
     # END PROBLEM 1
 
 
@@ -42,16 +43,13 @@ def free_bacon(score):
     assert score < 100, 'The game should be over.'
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    result = 1
     tens = score // 10
     ones = score % 10
-
-    total = 2*tens - ones
-
-    if total > 1: 
-        return total
-    else: 
-        return 1
-
+    fb = 2*tens - ones
+    if fb > result:
+        return fb
+    return result
     # END PROBLEM 2
 
 
@@ -71,10 +69,10 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
     if num_rolls == 0:
-        return free_bacon(opponent_score)
-    else:
-        return roll_dice(num_rolls, dice)
-
+        score = free_bacon(opponent_score)
+    else:    
+        score = roll_dice(num_rolls, dice)
+    return score
     # END PROBLEM 3
 
 
@@ -85,18 +83,19 @@ def is_swap(player_score, opponent_score):
     """
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
-
-    def abs_diff(num):
-        tens = num // 10
-        ones = num % 10
-
-        return abs(tens - ones)
+    player_score, opponent_score = player_score%100, opponent_score%100
+    def abs_diff(n):
+        tens = n // 10
+        ones = n % 10
+        if tens > ones:
+            return tens - ones
+        else:
+            return ones - tens
 
     if abs_diff(player_score) == abs_diff(opponent_score):
         return True
-    else: 
+    else:
         return False
-
     # END PROBLEM 4
 
 
@@ -115,13 +114,6 @@ def silence(score0, score1):
     """Announce nothing (see Phase 2)."""
     return silence
 
-def total(s0, s1):
-    print(s0 + s1)
-    return echo
-
-def echo(s0, s1):
-    print(s0, s1)
-    return total
 
 def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
          goal=GOAL_SCORE, say=silence):
@@ -141,24 +133,22 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     say:        The commentary function to call at the end of the first turn.
     """
     player = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
-
-
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
     while score0 < goal and score1 < goal:
-        s0 = strategy0(score0, score1)
-        s1 = strategy1(score1, score0)
         if player == 0:
-            score0 = score0 + take_turn(s0, score1, dice)
+            point_scored = take_turn(strategy0(score0,score1), score1, dice)
+            score0 += point_scored
             if is_swap(score0, score1):
                 score0, score1 = score1, score0
         else:
-            score1 = score1 + take_turn(s1, score0, dice)
+            point_scored = take_turn(strategy1(score1,score0), score0, dice)
+            score1 += point_scored
             if is_swap(score1, score0):
-                score1, score0 = score0, score1
+                score0, score1 = score1, score0
         player = other(player)
-
-        say = say(score0, score1)
+        # print(score0, score1)
+        
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6
@@ -243,8 +233,6 @@ def announce_highest(who, previous_high=0, previous_score=0):
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
     "*** YOUR CODE HERE ***"
-
-
     # END PROBLEM 7
 
 
