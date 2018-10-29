@@ -67,6 +67,14 @@ def count_cond(condition):
     8
     """
     "*** YOUR CODE HERE ***"
+    def calc(x, i = 1):
+        count = 0
+        while i <= x:
+            if condition(x, i):
+                count += 1
+            i += 1
+        return count
+    return calc
  
 
 def cycle(f1, f2, f3):
@@ -96,3 +104,33 @@ def cycle(f1, f2, f3):
     19
     """
     "*** YOUR CODE HERE ***"
+    def times(n):
+        def number(x):
+            value = x
+            if n != 0:
+                k = 0
+                while k < n:
+                    do = k % 3
+                    if do == 0:
+                        value = f1(value)
+                    elif do == 1:
+                        value = f2(value)
+                    elif do == 2:
+                        value = f3(value)
+                    k += 1
+            return value  
+
+        return number
+    return times
+
+
+def add1(x):
+    return x + 1
+
+def times2(x):
+    return x*2
+
+def add3(x):
+    return x+3
+
+my = cycle(add1, times2, add3)
