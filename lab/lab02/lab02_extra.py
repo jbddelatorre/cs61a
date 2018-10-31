@@ -134,3 +134,19 @@ def add3(x):
     return x+3
 
 my = cycle(add1, times2, add3)
+
+def abl2(n):
+    if n // 10 == 0:
+        return n
+    else:
+        return n % 10
+
+
+
+def eo(n):
+    if n // 100 != 0:
+        return (n % 10) + eo(n // 100)
+    else:
+        return n % 10
+
+    
